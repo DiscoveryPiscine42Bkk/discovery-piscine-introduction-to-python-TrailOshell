@@ -26,13 +26,13 @@ def testmate(board, expect, case):
         print(f"{GRN}OK {NCL}", end="")
     else:
         print(f"\n")
+        print(f"{YLW}Case: {PUR}{case} {NCL}")
         print(f"{CYN}", end="")
         for row in board.split():
             print(row)
         print(f"{NCL}", end="")
-        print(f"{RED}KO {NCL}", end="")
-        print(f"-> {YLW}Case: {PUR}{case} {NCL}", end="")
-        print(f"output \"{output[:-1]}\" expect \"{expect[:-1]}\"\n")
+        print(f"\n{CYN}output {NCL}\"{output[:-1]}\" \n{YLW}expect {NCL}\"{expect[:-1]}\"")
+        print(f"{RED}KO {NCL}")
     
 def cases_error():
     print(f"{PUR}Error Checks{NCL}")
@@ -143,6 +143,11 @@ def cases_fail():
     """
     testmate(board, FL, "No path to King")
 
+    print(f"\n")
+
+def cases_obstruct():
+    print(f"{PUR}blocked path Checks{NCL}")
+    
     board = """\
     ....
     .K..
@@ -150,7 +155,15 @@ def cases_fail():
     .R..\
     """
     testmate(board, FL, "Other piece obstruct King")
-
+    
+    board = """\
+    ....
+    .K.R
+    PPP.
+    .R..\
+    """
+    testmate(board, SC, "a piece obstruct but still check")
+    
     print(f"\n")
 
 def cases_odd_chars():
@@ -169,6 +182,7 @@ def main():
     cases_king_count()
     cases_success()
     cases_fail()
+    cases_obstruct()
     cases_odd_chars()
 
 if __name__ == "__main__":
