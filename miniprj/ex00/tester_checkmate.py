@@ -1,10 +1,10 @@
-import io
-from contextlib import redirect_stdout
 from checkmate import checkmate
-
 SC = "Success\n"
 FL = "Fail\n"
 ER = "Error\n"
+
+import io
+from contextlib import redirect_stdout
 
 NCL = "\033[0;39m"
 RED = "\033[0;91m"
@@ -15,24 +15,31 @@ PUR = "\033[0;95m"
 CYN = "\033[0;96m"
 
 def testmate(board, expect, case):
-    # print(f"{YLW}Case: {PUR}{case}{NCL}")
 
     buffer = io.StringIO()
     with redirect_stdout(buffer):
         checkmate(board)
-    
     output = buffer.getvalue()
-    if output.lower() == expect.lower() :
+
+    if expect == ER and (output == "" or output.strip() == ""):
+            print(f"{GRN}OK {NCL}", end="")
+    elif output.lower() == expect.lower() :
         print(f"{GRN}OK {NCL}", end="")
     else:
         print(f"\n")
         print(f"{YLW}Case: {PUR}{case} {NCL}")
-        print(f"{CYN}", end="")
-        for row in board.split():
-            print(row)
-        print(f"{NCL}", end="")
+        try:
+            print(f"{CYN}", end="")
+            for row in board.split():
+                print(row)
+            print(f"{NCL}", end="")
+        except:
+            print("", end="")
         print(f"\n{CYN}output {NCL}\"{output[:-1]}\" \n{YLW}expect {NCL}\"{expect[:-1]}\"")
-        print(f"{RED}KO {NCL}")
+        if expect == ER:
+            print(f"{YLW}ER {NCL}")
+        else:
+            print(f"{RED}KO {NCL}")
     
 def cases_error():
     print(f"{PUR}Error Checks{NCL}")
@@ -177,6 +184,14 @@ def cases_odd_chars():
 
     print(f"\n")
 
+def cases_not_string():
+    print(f"{PUR}Odd character Checks{NCL}")
+    board = 1234567890
+    testmate(board, ER, "numbers")
+
+    print(f"\n")
+
+
 def main():
     cases_error()
     cases_king_count()
@@ -184,6 +199,7 @@ def main():
     cases_fail()
     cases_obstruct()
     cases_odd_chars()
+    cases_not_string()
 
 if __name__ == "__main__":
     main()

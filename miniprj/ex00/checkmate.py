@@ -8,10 +8,10 @@ def checkmate(board):
 	try:
 		array = board.split()
 		if board.count("K") != 1:
-			return print("Error")
+			return print("Error!")
 		for row in array:
 			if len(row) != len(array):
-				return print("Error")
+				return
 
 		Chess = ChessPieces(array)
 		for row in range(len(array)):
